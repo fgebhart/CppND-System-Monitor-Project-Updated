@@ -15,4 +15,4 @@ jobs:
     - name: build
       run: make build
     - name: test
-      run: ./build/mytests
+      run: ./build/run_tests
