@@ -1,10 +1,6 @@
 name: C/C++ CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: push
 
 jobs:
   build:
@@ -12,6 +8,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: checkout repo
+      uses: actions/checkout@v2
+    - name: checkout submodules
+      uses: textbook/git-checkout-submodule-action@2.1.1
     - name: build
       run: make build
+    - name: test
+      run: ./build/run_tests
