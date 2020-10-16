@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout submodules
+    - name: checkout repo
       uses: actions/checkout@v2
-    - name: Checkout submodules
+    - name: checkout submodules
       uses: textbook/git-checkout-submodule-action@2.1.1
     - name: build
       run: make build

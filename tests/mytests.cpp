@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "myfunctions.h"
+#include "include/myfunctions.h"
 
 TEST(myfunctions, add)
 {
