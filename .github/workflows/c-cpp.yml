@@ -10,8 +10,8 @@ jobs:
     steps:
     - name: Checkout submodules
       uses: actions/checkout@v2
-      with:
-        args: git submodule update --init --recursive
+    - name: Checkout submodules
+      uses: textbook/git-checkout-submodule-action@2.1.1
     - name: build
       run: make build
     - name: test
