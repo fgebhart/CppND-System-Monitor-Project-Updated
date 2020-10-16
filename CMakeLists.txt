@@ -13,3 +13,14 @@ set_property(TARGET monitor PROPERTY CXX_STANDARD 17)
 target_link_libraries(monitor ${CURSES_LIBRARIES})
 # TODO: Run -Werror in CI.
 target_compile_options(monitor PRIVATE -Wall -Wextra)
+
+
+# configuration to work with google test
+
+add_subdirectory(googletest) # add googletest subdirectory
+
+include_directories(googletest/include) # this is so we can #include <gtest/gtest.h>
+
+add_executable(mytests mytests.cpp) # add this executable
+
+target_link_libraries(mytests PRIVATE gtest) # link google test to this executable
