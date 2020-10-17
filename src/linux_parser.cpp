@@ -12,10 +12,8 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-string LinuxParser::OperatingSystem() {
-  return FindValueForKeyInFile(kOSPath, "PRETTY_NAME");
-}
 
+// get the value to a given key in a file
 string LinuxParser::FindValueForKeyInFile(string path_to_file,
                                           string lookup_key) {
   string line;
@@ -39,6 +37,7 @@ string LinuxParser::FindValueForKeyInFile(string path_to_file,
   return value;
 }
 
+// check if a file contains a given word
 bool LinuxParser::IsWordInFile(string path_to_file, string lookup_word) {
   string line;
   std::ifstream filestream(path_to_file);
@@ -53,7 +52,11 @@ bool LinuxParser::IsWordInFile(string path_to_file, string lookup_word) {
   return false;
 }
 
-// DONE: An example of how to read data from the filesystem
+string LinuxParser::OperatingSystem() {
+  return FindValueForKeyInFile(kOSPath, "PRETTY_NAME");
+}
+
+// An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
   string os, version, kernel;
   string line;
@@ -89,7 +92,7 @@ vector<int> LinuxParser::Pids() {
 // TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() { return 0.0; }
 
-// TODO: Read and return the system uptime
+// Read and return the system uptime
 long LinuxParser::UpTime() {
   long uptime, idletime;
   string line;
@@ -118,10 +121,10 @@ long LinuxParser::IdleJiffies() { return 0; }
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
-// TODO: Read and return the total number of processes
+// Read and return the total number of processes
 int LinuxParser::TotalProcesses() { return Pids().size(); }
 
-// TODO: Read and return the number of running processes
+// Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
   vector<int> pids = Pids();
   int number_of_pids = pids.size();
