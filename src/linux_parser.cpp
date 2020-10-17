@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <unistd.h>
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -11,12 +12,15 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-// DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
+  return FindValueForKeyInFile(kOSPath, "PRETTY_NAME");
+}
+
+string LinuxParser::FindValueForKeyInFile(string path_to_file, string lookup_key) {
   string line;
   string key;
   string value;
-  std::ifstream filestream(kOSPath);
+  std::ifstream filestream(path_to_file);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
       std::replace(line.begin(), line.end(), ' ', '_');
@@ -24,7 +28,7 @@ string LinuxParser::OperatingSystem() {
       std::replace(line.begin(), line.end(), '"', ' ');
       std::istringstream linestream(line);
       while (linestream >> key >> value) {
-        if (key == "PRETTY_NAME") {
+        if (key == lookup_key) {
           std::replace(value.begin(), value.end(), '_', ' ');
           return value;
         }
@@ -100,10 +104,18 @@ long LinuxParser::IdleJiffies() { return 0; }
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
 // TODO: Read and return the total number of processes
-int LinuxParser::TotalProcesses() { return Pids().size() ; }
+int LinuxParser::TotalProcesses() { return Pids().size(); }
 
 // TODO: Read and return the number of running processes
-int LinuxParser::RunningProcesses() { return 0; }
+int LinuxParser::RunningProcesses() {
+  for (auto pid : Pids()) {
+    // std::cout << "got pid: " << pid << "\n";
+    // read status file inside the pid directory
+    
+  }
+
+  return 17;
+}
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
