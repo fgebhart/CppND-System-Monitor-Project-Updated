@@ -16,7 +16,8 @@ string LinuxParser::OperatingSystem() {
   return FindValueForKeyInFile(kOSPath, "PRETTY_NAME");
 }
 
-string LinuxParser::FindValueForKeyInFile(string path_to_file, string lookup_key) {
+string LinuxParser::FindValueForKeyInFile(string path_to_file,
+                                          string lookup_key) {
   string line;
   string key;
   string value;
@@ -36,6 +37,20 @@ string LinuxParser::FindValueForKeyInFile(string path_to_file, string lookup_key
     }
   }
   return value;
+}
+
+bool LinuxParser::IsWordInFile(string path_to_file, string lookup_word) {
+  string line;
+  std::ifstream filestream(path_to_file);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      if (line.find(lookup_word) != std::string::npos) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 // DONE: An example of how to read data from the filesystem
@@ -108,13 +123,18 @@ int LinuxParser::TotalProcesses() { return Pids().size(); }
 
 // TODO: Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
-  for (auto pid : Pids()) {
-    // std::cout << "got pid: " << pid << "\n";
-    // read status file inside the pid directory
-    
+  vector<int> pids = Pids();
+  int number_of_pids = pids.size();
+  for (auto pid : pids) {
+    // check if the status file of the pid contains the word sleeping
+    if (IsWordInFile(kProcDirectory + std::to_string(pid) + "/status",
+                     "sleeping") == true) {
+      // if it contains the word sleeping it is not a running process, reduce nr
+      // of running pids by 1
+      number_of_pids -= 1;
+    }
   }
-
-  return 17;
+  return number_of_pids;
 }
 
 // TODO: Read and return the command associated with a process
