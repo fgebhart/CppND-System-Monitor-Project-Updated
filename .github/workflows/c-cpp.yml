@@ -14,5 +14,3 @@ jobs:
       uses: textbook/git-checkout-submodule-action@2.1.1
     - name: build
       run: make build
-    - name: test
-      run: ./build/run_tests
