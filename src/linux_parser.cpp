@@ -47,10 +47,10 @@ int GetSecondPositionValue(string path_to_file, string lookup_key) {
       if (line.find(lookup_key) != std::string::npos) {
         std::istringstream linestream(line);
         linestream >> key >> value;
-        return value;
       }
     }
   }
+  return value;
 }
 
 string LinuxParser::OperatingSystem() {
@@ -91,7 +91,11 @@ vector<int> LinuxParser::Pids() {
 }
 
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() {
+  int MemTotal = GetSecondPositionValue(kProcDirectory + kMeminfoFilename, "MemTotal:");
+  int MemFree = GetSecondPositionValue(kProcDirectory + kMeminfoFilename, "MemFree:");
+  return float(MemTotal - MemFree) / float(MemTotal);
+}
 
 // Read and return the system uptime
 long LinuxParser::UpTime() {
