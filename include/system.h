@@ -2,6 +2,7 @@
 #define SYSTEM_H
 
 #include <string>
+#include <iostream>
 #include <vector>
 
 #include "process.h"

@@ -28,7 +28,6 @@ std::string OperatingSystem();
 std::string Kernel();
 std::string FindValueForKeyInFile(std::string path_to_file,
                                   std::string lookup_key);
-bool IsWordInFile(std::string path_to_file, std::string lookup_word);
 
 // CPU
 enum CPUStates {
