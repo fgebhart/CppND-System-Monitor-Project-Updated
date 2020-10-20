@@ -1,9 +1,8 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 
-#include <vector>
 #include <string>
-
+#include <vector>
 
 class Processor {
  public:
@@ -12,10 +11,11 @@ class Processor {
 
   // Declare any necessary private members
  private:
- // cpu stat values
- int idle, iowait, user, nice, system, irq, softirq, steal;
- // previous cpu stat values
- int previdle, previowait, prevuser, prevnice, prevsystem, previrq, prevsoftirq, prevsteal;
+  // cpu stat values
+  int idle, iowait, user, nice, system, irq, softirq, steal;
+  // previous cpu stat values
+  int previdle, previowait, prevuser, prevnice, prevsystem, previrq,
+      prevsoftirq, prevsteal;
 };
 
 #endif

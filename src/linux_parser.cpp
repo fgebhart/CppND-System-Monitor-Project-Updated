@@ -12,7 +12,6 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-
 // get the value to a given key in a file
 string LinuxParser::FindValueForKeyInFile(string path_to_file,
                                           string lookup_key) {
@@ -37,7 +36,8 @@ string LinuxParser::FindValueForKeyInFile(string path_to_file,
   return value;
 }
 
-int GetSecondPositionValue(string path_to_file, string lookup_key) {
+int LinuxParser::GetSecondPositionValue(string path_to_file,
+                                        string lookup_key) {
   string line;
   string key;
   int value;
@@ -51,6 +51,27 @@ int GetSecondPositionValue(string path_to_file, string lookup_key) {
     }
   }
   return value;
+}
+
+string LinuxParser::GetUserNameByUid(string lookup_uid) {
+  string username;
+  string line;
+  string key;
+  string separator;
+  string uid;
+  std::ifstream filestream(kPasswordPath);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream linestream(line);
+      while (linestream >> username >> separator >> uid) {
+        if (uid == lookup_uid) {
+          return username;
+        }
+      }
+    }
+  }
+  return username;
 }
 
 string LinuxParser::OperatingSystem() {
@@ -92,8 +113,10 @@ vector<int> LinuxParser::Pids() {
 
 // TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() {
-  int MemTotal = GetSecondPositionValue(kProcDirectory + kMeminfoFilename, "MemTotal:");
-  int MemFree = GetSecondPositionValue(kProcDirectory + kMeminfoFilename, "MemFree:");
+  int MemTotal = LinuxParser::GetSecondPositionValue(
+      kProcDirectory + kMeminfoFilename, "MemTotal:");
+  int MemFree = LinuxParser::GetSecondPositionValue(
+      kProcDirectory + kMeminfoFilename, "MemFree:");
   return float(MemTotal - MemFree) / float(MemTotal);
 }
 
@@ -128,12 +151,14 @@ vector<string> LinuxParser::CpuUtilization() { return {}; }
 
 // Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
-  return GetSecondPositionValue(kProcDirectory + kStatFilename, "processes");
+  return LinuxParser::GetSecondPositionValue(kProcDirectory + kStatFilename,
+                                             "processes");
 }
 
 // Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
-  return GetSecondPositionValue(kProcDirectory + kStatFilename, "procs_running");
+  return LinuxParser::GetSecondPositionValue(kProcDirectory + kStatFilename,
+                                             "procs_running");
 }
 
 // TODO: Read and return the command associated with a process

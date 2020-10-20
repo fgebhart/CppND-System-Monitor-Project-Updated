@@ -19,12 +19,18 @@ using std::vector;
 
 // start reading data from the file system
 void System::Update() {
-    uptime_ = LinuxParser::UpTime();
-    totalprocesses_ = LinuxParser::TotalProcesses();
-    runningprocesses_ = LinuxParser::RunningProcesses();
-    os_ = LinuxParser::OperatingSystem();
-    mem_ = LinuxParser::MemoryUtilization();
-    kernel_ = LinuxParser::Kernel();
+  uptime_ = LinuxParser::UpTime();
+  totalprocesses_ = LinuxParser::TotalProcesses();
+  runningprocesses_ = LinuxParser::RunningProcesses();
+  os_ = LinuxParser::OperatingSystem();
+  mem_ = LinuxParser::MemoryUtilization();
+  kernel_ = LinuxParser::Kernel();
+  // gather information on processes
+  for (auto pid : LinuxParser::Pids()) {
+    Process process;
+    process.GatherInfo(pid);
+    processes_.push_back(process);
+  }
 }
 
 // TODO: Return the system's CPU

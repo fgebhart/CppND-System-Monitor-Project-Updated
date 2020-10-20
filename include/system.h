@@ -1,8 +1,8 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include <string>
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include "process.h"
@@ -30,7 +30,6 @@ class System {
   std::string os_;
   float mem_;
   std::string kernel_;
-
 };
 
 #endif
