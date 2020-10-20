@@ -9,6 +9,7 @@ It contains relevant attributes as shown below
 class Process {
  public:
   // getter functions
+  // TODO clean up duplicate functions
   int Pid() const;
   std::string User() const;
   std::string Command() const;
@@ -18,6 +19,7 @@ class Process {
   bool operator<(Process const& a) const;
   std::string GetMemoryUtilizationOfProcess(int pid) const;
   std::string GetCommandOfProcess(int pid) const;
+  long int GetUpTimeOfProcess(int pid) const;
 
   // setter functions
   void GatherInfo(int pid);
@@ -31,5 +33,7 @@ class Process {
   std::string ram_;
   long int uptime_;
 };
+
+std::string ReduceStringLength(std::string input_string, int target_length);
 
 #endif

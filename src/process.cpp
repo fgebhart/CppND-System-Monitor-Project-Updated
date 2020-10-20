@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <math.h>
 
 #include "linux_parser.h"
 
@@ -13,12 +14,24 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+
+string ReduceStringLength(string input_string, int target_length) {
+    int to_be_removed = input_string.size() - target_length;
+    string output_string = input_string.substr(0, input_string.size() - to_be_removed);
+    return output_string;
+}
+
 string Process::GetMemoryUtilizationOfProcess(int pid) const {
-  int memory_utilization = LinuxParser::GetSecondPositionValue(
+  float memory_utilization = LinuxParser::GetSecondPositionValue(
       LinuxParser::kProcDirectory + std::to_string(pid) +
           LinuxParser::kStatusFilename,
       "VmSize:");
-  return std::to_string(memory_utilization / 1000);
+      // turn kilo to megabytes
+      memory_utilization = memory_utilization / 1000;
+      // round to hundredths
+      memory_utilization = floor(memory_utilization * 100 + 0.5 ) / 100;
+      // limit string length for proper displaying
+  return ReduceStringLength(std::to_string(memory_utilization), 5);;
 };
 
 string Process::GetCommandOfProcess(int pid) const {
