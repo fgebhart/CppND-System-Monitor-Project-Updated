@@ -74,6 +74,14 @@ string LinuxParser::GetUserNameByUid(string lookup_uid) {
   return username;
 }
 
+string LinuxParser::GetEntireContentOfFile(string path_to_file) {
+  std::ifstream input(path_to_file);
+  std::stringstream sstr;
+  while (input >> sstr.rdbuf())
+    ;
+  return sstr.str();
+}
+
 string LinuxParser::OperatingSystem() {
   return FindValueForKeyInFile(kOSPath, "PRETTY_NAME");
 }

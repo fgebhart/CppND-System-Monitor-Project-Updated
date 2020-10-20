@@ -9,14 +9,15 @@ It contains relevant attributes as shown below
 class Process {
  public:
   // getter functions
-  int Pid();
-  std::string User();
-  std::string Command();
-  float CpuUtilization();
-  std::string Ram();
-  long int UpTime();
+  int Pid() const;
+  std::string User() const;
+  std::string Command() const;
+  float CpuUtilization() const;
+  std::string Ram() const;
+  long int UpTime() const;
   bool operator<(Process const& a) const;
-  std::string GetMemoryUtilizationByPid(int pid);
+  std::string GetMemoryUtilizationOfProcess(int pid) const;
+  std::string GetCommandOfProcess(int pid) const;
 
   // setter functions
   void GatherInfo(int pid);

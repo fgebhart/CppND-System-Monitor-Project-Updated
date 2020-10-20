@@ -26,6 +26,7 @@ void System::Update() {
   mem_ = LinuxParser::MemoryUtilization();
   kernel_ = LinuxParser::Kernel();
   // gather information on processes
+  processes_ = {};  // reinitialize vector of processes
   for (auto pid : LinuxParser::Pids()) {
     Process process;
     process.GatherInfo(pid);
