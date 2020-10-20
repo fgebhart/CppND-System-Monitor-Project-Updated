@@ -16,6 +16,7 @@ class Process {
   std::string Ram();
   long int UpTime();
   bool operator<(Process const& a) const;
+  std::string GetMemoryUtilizationByPid(int pid);
 
   // setter functions
   void GatherInfo(int pid);
