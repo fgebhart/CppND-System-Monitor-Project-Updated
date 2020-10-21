@@ -31,6 +31,7 @@ std::string FindValueForKeyInFile(std::string path_to_file,
 int GetSecondPositionValue(std::string path_to_file, std::string lookup_key);
 std::string GetUserNameByUid(std::string lookup_uid);
 std::string GetEntireContentOfFile(std::string path_to_file);
+std::string GetNthValue(std::string path_to_file, int nth_value);
 
 // CPU
 enum CPUStates {

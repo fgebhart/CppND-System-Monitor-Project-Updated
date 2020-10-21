@@ -32,6 +32,9 @@ void System::Update() {
     process.GatherInfo(pid);
     processes_.push_back(process);
   }
+  // sort the vector of processes using the overloaded < operator and a lambda expression
+  std::sort(processes_.begin(), processes_.end(), [&](const auto p1, const auto p2)
+        { return p1 < p2; });
 }
 
 // TODO: Return the system's CPU

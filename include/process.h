@@ -20,6 +20,7 @@ class Process {
   std::string GetMemoryUtilizationOfProcess(int pid) const;
   std::string GetCommandOfProcess(int pid) const;
   long int GetUpTimeOfProcess(int pid) const;
+  float GetCpuUtilizationOfProcess(int pid) const;
 
   // setter functions
   void GatherInfo(int pid);

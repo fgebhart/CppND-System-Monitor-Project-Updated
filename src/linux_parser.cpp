@@ -36,6 +36,25 @@ string LinuxParser::FindValueForKeyInFile(string path_to_file,
   return value;
 }
 
+// TODO: check if some functions can be removed by using the following function
+// instead
+string LinuxParser::GetNthValue(string path_to_file, int nth_value) {
+  string item;
+  string value;
+  std::ifstream filestream(path_to_file);
+  if (filestream.is_open()) {
+    int counter = 1;
+    while (std::getline(filestream, item, ' ')) {
+      // get 22nd value of file, which holds the uptime
+      if (counter == nth_value) {
+        value = item;
+      }
+      counter += 1;
+    }
+  }
+  return value;
+}
+
 int LinuxParser::GetSecondPositionValue(string path_to_file,
                                         string lookup_key) {
   string line;
