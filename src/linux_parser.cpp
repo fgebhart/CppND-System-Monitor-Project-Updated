@@ -1,15 +1,11 @@
 #include "linux_parser.h"
 
 #include <dirent.h>
-#include <unistd.h>
 
-#include <iostream>
 #include <string>
 #include <vector>
 
-using std::stof;
 using std::string;
-using std::to_string;
 using std::vector;
 
 // get the value to a given key in a file
@@ -36,8 +32,6 @@ string LinuxParser::FindValueForKeyInFile(string path_to_file,
   return value;
 }
 
-// TODO: check if some functions can be removed by using the following function
-// instead
 string LinuxParser::GetNthValue(string path_to_file, int nth_value) {
   string item;
   string value;
@@ -93,14 +87,6 @@ string LinuxParser::GetUserNameByUid(string lookup_uid) {
   return username;
 }
 
-string LinuxParser::GetEntireContentOfFile(string path_to_file) {
-  std::ifstream input(path_to_file);
-  std::stringstream sstr;
-  while (input >> sstr.rdbuf())
-    ;
-  return sstr.str();
-}
-
 string LinuxParser::OperatingSystem() {
   return FindValueForKeyInFile(kOSPath, "PRETTY_NAME");
 }
@@ -138,7 +124,7 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
+// Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() {
   int MemTotal = LinuxParser::GetSecondPositionValue(
       kProcDirectory + kMeminfoFilename, "MemTotal:");
@@ -160,22 +146,6 @@ long LinuxParser::UpTime() {
   return uptime;
 }
 
-// TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { return 0; }
-
-// TODO: Read and return the number of active jiffies for a PID
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::ActiveJiffies(int pid [[maybe_unused]]) { return 0; }
-
-// TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
-
-// TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
-
-// TODO: Read and return CPU utilization
-vector<string> LinuxParser::CpuUtilization() { return {}; }
-
 // Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
   return LinuxParser::GetSecondPositionValue(kProcDirectory + kStatFilename,
@@ -187,23 +157,3 @@ int LinuxParser::RunningProcesses() {
   return LinuxParser::GetSecondPositionValue(kProcDirectory + kStatFilename,
                                              "procs_running");
 }
-
-// TODO: Read and return the command associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Command(int pid [[maybe_unused]]) { return string(); }
-
-// TODO: Read and return the memory used by a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid [[maybe_unused]]) { return string(); }
-
-// TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid [[maybe_unused]]) { return string(); }
-
-// TODO: Read and return the user associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid [[maybe_unused]]) { return string(); }
-
-// TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid [[maybe_unused]]) { return 0; }

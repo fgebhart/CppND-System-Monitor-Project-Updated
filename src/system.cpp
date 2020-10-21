@@ -1,8 +1,5 @@
 #include "system.h"
 
-#include <format.h>
-#include <unistd.h>
-
 #include <cstddef>
 #include <set>
 #include <string>
@@ -17,7 +14,8 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-// start reading data from the file system
+// start reading data from the file system and cache the values in the System
+// class' member variables
 void System::Update() {
   uptime_ = LinuxParser::UpTime();
   totalprocesses_ = LinuxParser::TotalProcesses();
@@ -32,27 +30,29 @@ void System::Update() {
     process.GatherInfo(pid);
     processes_.push_back(process);
   }
-  // sort the vector of processes using the overloaded < operator and a lambda expression
-  std::sort(processes_.begin(), processes_.end(), [&](const auto p1, const auto p2)
-        { return p1 < p2; });
+  // sort the vector of processes using the overloaded < operator and a lambda
+  // expression
+  std::sort(processes_.begin(), processes_.end(),
+            [&](const auto p1, const auto p2) { return p1 < p2; });
 }
 
-// TODO: Return the system's CPU
+// Getter functions of the systemclass to return the cached values:
+// Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
 
-// TODO: Return a container composed of the system's processes
+// Return a container composed of the system's processes
 vector<Process>& System::Processes() { return processes_; }
 
 // Return the system's kernel identifier (string)
 std::string System::Kernel() { return kernel_; }
 
-// TODO: Return the system's memory utilization
+// Return the system's memory utilization
 float System::MemoryUtilization() { return mem_; }
 
 // Return the operating system name
 std::string System::OperatingSystem() { return os_; }
 
-// TODO: Return the number of processes actively running on the system
+// Return the number of processes actively running on the system
 int System::RunningProcesses() { return runningprocesses_; }
 
 // Return the total number of processes on the system

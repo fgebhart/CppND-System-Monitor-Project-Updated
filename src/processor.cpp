@@ -5,38 +5,30 @@
 
 #include "linux_parser.h"
 
-/**
- * Get CPU data from kStatFilename.
- *
- * @param which_cpu: could be e.g. 'cpu' for the aggregate of all cpus or
- * 'cpu0', 'cpu1', ... for individual cpus.
- * @return a vector containing the cpu data.
- */
-std::vector<std::string> Processor::GetCPUData(std::string which_cpu) {
+std::vector<std::string> Processor::GetCPUData() {
   std::vector<std::string> cpu_data;
   std::string value, line;
   std::ifstream filestream(LinuxParser::kProcDirectory +
                            LinuxParser::kStatFilename);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
-      if (line.find(which_cpu) != std::string::npos) {
+      if (line.find("cpu") != std::string::npos) {
         std::istringstream linestream(line);
         while (linestream >> value) {
-          if (value != which_cpu) {
+          if (value != "cpu") {
             cpu_data.push_back(value);
           }
         }
-        break;  // ensure to only collect the data of the first hit for given
-                // 'which_cpu'
+        break;  // ensure to only collect the data of the first hit of "cpu"
       }
     }
   }
   return cpu_data;
 }
 
-// TODO: Return the aggregate CPU utilization
+// Return the aggregate CPU utilization
 float Processor::Utilization() {
-  std::vector<std::string> cpu_agg = GetCPUData("cpu");
+  std::vector<std::string> cpu_agg = GetCPUData();
   user = std::stoi(cpu_agg[0]);
   nice = std::stoi(cpu_agg[1]);
   system = std::stoi(cpu_agg[2]);

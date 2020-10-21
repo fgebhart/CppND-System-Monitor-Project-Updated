@@ -6,7 +6,7 @@
 
 class Processor {
  public:
-  std::vector<std::string> GetCPUData(std::string which_cpu);
+  std::vector<std::string> GetCPUData();
   float Utilization();  // See src/processor.cpp
 
   // Declare any necessary private members

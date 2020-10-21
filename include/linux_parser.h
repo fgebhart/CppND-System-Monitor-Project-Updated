@@ -30,7 +30,6 @@ std::string FindValueForKeyInFile(std::string path_to_file,
                                   std::string lookup_key);
 int GetSecondPositionValue(std::string path_to_file, std::string lookup_key);
 std::string GetUserNameByUid(std::string lookup_uid);
-std::string GetEntireContentOfFile(std::string path_to_file);
 std::string GetNthValue(std::string path_to_file, int nth_value);
 
 // CPU
@@ -46,18 +45,6 @@ enum CPUStates {
   kGuest_,
   kGuestNice_
 };
-std::vector<std::string> CpuUtilization();
-long Jiffies();
-long ActiveJiffies();
-long ActiveJiffies(int pid);
-long IdleJiffies();
-
-// Processes
-std::string Command(int pid);
-std::string Ram(int pid);
-std::string Uid(int pid);
-std::string User(int pid);
-long int UpTime(int pid);
 };  // namespace LinuxParser
 
 #endif

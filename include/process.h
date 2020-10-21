@@ -9,7 +9,6 @@ It contains relevant attributes as shown below
 class Process {
  public:
   // getter functions
-  // TODO clean up duplicate functions
   int Pid() const;
   std::string User() const;
   std::string Command() const;
@@ -18,7 +17,6 @@ class Process {
   long int UpTime() const;
   bool operator<(Process const& a) const;
   std::string GetMemoryUtilizationOfProcess(int pid) const;
-  std::string GetCommandOfProcess(int pid) const;
   long int GetUpTimeOfProcess(int pid) const;
   float GetCpuUtilizationOfProcess(int pid) const;
 

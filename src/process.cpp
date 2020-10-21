@@ -37,19 +37,13 @@ string Process::GetMemoryUtilizationOfProcess(int pid) const {
   ;
 };
 
-string Process::GetCommandOfProcess(int pid) const {
-  string path_to_cmd_file = LinuxParser::kProcDirectory + std::to_string(pid) +
-                            LinuxParser::kCmdlineFilename;
-  return LinuxParser::GetEntireContentOfFile(path_to_cmd_file);
-};
-
 long int Process::GetUpTimeOfProcess(int pid) const {
   string value = LinuxParser::GetNthValue(LinuxParser::kProcDirectory +
                                               std::to_string(pid) +
                                               LinuxParser::kStatFilename,
                                           22);
   // turn clock ticks into seconds
-  long int uptime = std::stoi(value) / sysconf(_SC_CLK_TCK);
+  long int uptime = ::atof(value.c_str()) / sysconf(_SC_CLK_TCK);
   return uptime;
 };
 
@@ -89,7 +83,7 @@ float Process::GetCpuUtilizationOfProcess(int pid) const {
   total_time = total_time + ::atof(cutime.c_str()) + ::atof(cstime.c_str());
   float seconds = ::atof(uptime.c_str()) -
                   (::atof(starttime.c_str()) / sysconf(_SC_CLK_TCK));
-  float cpu_usage = 100 * ((total_time / sysconf(_SC_CLK_TCK)) / seconds);
+  float cpu_usage = (total_time / sysconf(_SC_CLK_TCK)) / seconds;
   return cpu_usage;
 };
 
@@ -101,7 +95,7 @@ void Process::GatherInfo(int pid) {
       "Uid:");
   user_ = LinuxParser::GetUserNameByUid(std::to_string(uid));
   ram_ = GetMemoryUtilizationOfProcess(pid);
-  command_ = GetCommandOfProcess(pid);
+  command_ = Command();
   uptime_ = GetUpTimeOfProcess(pid);
   cpu_utilization_ = GetCpuUtilizationOfProcess(pid);
 }
@@ -112,8 +106,12 @@ int Process::Pid() const { return pid_; }
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() const { return cpu_utilization_; }
 
-// TODO: Return the command that generated this process
-string Process::Command() const { return command_; }
+// Return the command that generated this process
+string Process::Command() const {
+  string path_to_cmd_file = LinuxParser::kProcDirectory + std::to_string(pid_) +
+                            LinuxParser::kCmdlineFilename;
+  return LinuxParser::GetNthValue(path_to_cmd_file, 1);
+}
 
 // TODO: Return this process's memory utilization
 string Process::Ram() const { return ram_; }
