@@ -9,8 +9,8 @@ using std::string;
 using std::vector;
 
 
-vector<string> LinuxParser::GetCPUData() {
-  vector<string> cpu_data;
+vector<int> LinuxParser::GetCPUData() {
+  vector<int> cpu_data;
   string value, line;
   std::ifstream filestream(LinuxParser::kProcDirectory +
                            LinuxParser::kStatFilename);
@@ -20,7 +20,7 @@ vector<string> LinuxParser::GetCPUData() {
         std::istringstream linestream(line);
         while (linestream >> value) {
           if (value != "cpu") {
-            cpu_data.push_back(value);
+            cpu_data.push_back(std::stoi(value));
           }
         }
         break;  // ensure to only collect the data of the first hit of "cpu"

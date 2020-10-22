@@ -5,18 +5,20 @@
 
 #include "linux_parser.h"
 
+  using namespace LinuxParser;
+
 
 // Return the aggregate CPU utilization
 float Processor::Utilization() {
-  std::vector<std::string> cpu_agg = LinuxParser::GetCPUData();
-  user = std::stoi(cpu_agg[0]);
-  nice = std::stoi(cpu_agg[1]);
-  system = std::stoi(cpu_agg[2]);
-  idle = std::stoi(cpu_agg[3]);
-  iowait = std::stoi(cpu_agg[4]);
-  irq = std::stoi(cpu_agg[5]);
-  softirq = std::stoi(cpu_agg[6]);
-  steal = std::stoi(cpu_agg[7]);
+  std::vector<int> cpu_agg = LinuxParser::GetCPUData();
+  user = cpu_agg[CPUStates::kUser_];
+  nice = cpu_agg[CPUStates::kNice_];
+  system = cpu_agg[CPUStates::kSystem_];
+  idle = cpu_agg[CPUStates::kIdle_];
+  iowait = cpu_agg[CPUStates::kIOwait_];
+  irq = cpu_agg[CPUStates::kIRQ_];
+  softirq = cpu_agg[CPUStates::kSoftIRQ_];
+  steal = cpu_agg[CPUStates::kSteal_];
 
   // algorithm for computing the cpu utilization, taken from
   // https://stackoverflow.com/a/23376195/5384702

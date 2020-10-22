@@ -26,7 +26,7 @@ int TotalProcesses();
 int RunningProcesses();
 std::string OperatingSystem();
 std::string Kernel();
-std::vector<std::string> GetCPUData();
+std::vector<int> GetCPUData();
 std::string FindValueForKeyInFile(std::string path_to_file,
                                   std::string lookup_key);
 int GetSecondPositionValue(std::string path_to_file, std::string lookup_key);
@@ -35,7 +35,7 @@ std::string GetNthValue(std::string path_to_file, int nth_value);
 
 // CPU
 enum CPUStates {
-  kUser_ = 0,
+  kUser_,
   kNice_,
   kSystem_,
   kIdle_,
@@ -43,8 +43,6 @@ enum CPUStates {
   kIRQ_,
   kSoftIRQ_,
   kSteal_,
-  kGuest_,
-  kGuestNice_
 };
 };  // namespace LinuxParser
 
