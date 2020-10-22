@@ -12,15 +12,14 @@ string Format::ElapsedTime(long seconds) {
   std::string hour = std::to_string(seconds / 3600);
   std::string minute = std::to_string((seconds % 3600) / 60);
   std::string second = std::to_string(seconds % 60);
-  std::vector<std::string> v;
-  v = {hour, minute, second};
+  std::vector<std::string> v = {hour, minute, second};
 
   // prepend 0 in case the string length is 1
-  // TODO can this be solved using a pointer to the original variables?
-  for (int i = 0; i < 3; ++i) {
+  for (auto i = 0; i < 3; ++i) {
     if (v[i].length() == 1) {
       v[i] = "0" + v[i];
     }
   }
+
   return v[0] + ":" + v[1] + ":" + v[2];
 }

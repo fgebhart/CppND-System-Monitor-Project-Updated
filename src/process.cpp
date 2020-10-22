@@ -23,59 +23,52 @@ string ReduceStringLength(string input_string, int target_length) {
   return output_string;
 }
 
-string Process::GetMemoryUtilizationOfProcess(int pid) const {
-  float memory_utilization = LinuxParser::GetSecondPositionValue(
+void Process::GatherInfo(int pid) {
+  pid_ = pid;
+  int uid = LinuxParser::GetSecondPositionValue(
       LinuxParser::kProcDirectory + std::to_string(pid) +
           LinuxParser::kStatusFilename,
-      "VmSize:");
-  // turn kilo to megabytes
-  memory_utilization = memory_utilization / 1000;
-  // round to hundredths
-  memory_utilization = floor(memory_utilization * 100 + 0.5) / 100;
-  // limit string length for proper displaying
-  return ReduceStringLength(std::to_string(memory_utilization), 6);
-  ;
-};
+      "Uid:");
+  user_ = LinuxParser::GetUserNameByUid(std::to_string(uid));
+  ram_ = Ram();
+  command_ = Command();
+  uptime_ = UpTime();
+  cpu_utilization_ = CpuUtilization();
+}
 
-long int Process::GetUpTimeOfProcess(int pid) const {
-  string value = LinuxParser::GetNthValue(LinuxParser::kProcDirectory +
-                                              std::to_string(pid) +
-                                              LinuxParser::kStatFilename,
-                                          22);
-  // turn clock ticks into seconds
-  long int uptime = ::atof(value.c_str()) / sysconf(_SC_CLK_TCK);
-  return uptime;
-};
+// Return this process's ID
+int Process::Pid() const { return pid_; }
 
-float Process::GetCpuUtilizationOfProcess(int pid) const {
+// Return this process's CPU utilization
+float Process::CpuUtilization() const {
   // system uptime
   string uptime = LinuxParser::GetNthValue(
       LinuxParser::kProcDirectory + LinuxParser::kUptimeFilename, 1);
   // #14 utime - CPU time spent in user code, measured in clock ticks
   string utime = LinuxParser::GetNthValue(LinuxParser::kProcDirectory +
-                                              std::to_string(pid) +
+                                              std::to_string(pid_) +
                                               LinuxParser::kStatFilename,
                                           14);
   // #15 stime - CPU time spent in kernel code, measured in clock ticks
   string stime = LinuxParser::GetNthValue(LinuxParser::kProcDirectory +
-                                              std::to_string(pid) +
+                                              std::to_string(pid_) +
                                               LinuxParser::kStatFilename,
                                           15);
   // #16 cutime - Waited-for children's CPU time spent in user code (in clock
   // ticks)
   string cutime = LinuxParser::GetNthValue(LinuxParser::kProcDirectory +
-                                               std::to_string(pid) +
+                                               std::to_string(pid_) +
                                                LinuxParser::kStatFilename,
                                            16);
   // #17 cstime - Waited-for children's CPU time spent in kernel code (in clock
   // ticks)
   string cstime = LinuxParser::GetNthValue(LinuxParser::kProcDirectory +
-                                               std::to_string(pid) +
+                                               std::to_string(pid_) +
                                                LinuxParser::kStatFilename,
                                            17);
   // #22 starttime - Time when the process started, measured in clock ticks
   string starttime = LinuxParser::GetNthValue(LinuxParser::kProcDirectory +
-                                                  std::to_string(pid) +
+                                                  std::to_string(pid_) +
                                                   LinuxParser::kStatFilename,
                                               22);
   // calculation
@@ -87,25 +80,6 @@ float Process::GetCpuUtilizationOfProcess(int pid) const {
   return cpu_usage;
 };
 
-void Process::GatherInfo(int pid) {
-  pid_ = pid;
-  int uid = LinuxParser::GetSecondPositionValue(
-      LinuxParser::kProcDirectory + std::to_string(pid) +
-          LinuxParser::kStatusFilename,
-      "Uid:");
-  user_ = LinuxParser::GetUserNameByUid(std::to_string(uid));
-  ram_ = GetMemoryUtilizationOfProcess(pid);
-  command_ = Command();
-  uptime_ = GetUpTimeOfProcess(pid);
-  cpu_utilization_ = GetCpuUtilizationOfProcess(pid);
-}
-
-// TODO: Return this process's ID
-int Process::Pid() const { return pid_; }
-
-// TODO: Return this process's CPU utilization
-float Process::CpuUtilization() const { return cpu_utilization_; }
-
 // Return the command that generated this process
 string Process::Command() const {
   string path_to_cmd_file = LinuxParser::kProcDirectory + std::to_string(pid_) +
@@ -113,14 +87,34 @@ string Process::Command() const {
   return LinuxParser::GetNthValue(path_to_cmd_file, 1);
 }
 
-// TODO: Return this process's memory utilization
-string Process::Ram() const { return ram_; }
+// Return this process's memory utilization
+string Process::Ram() const {
+  float memory_utilization = LinuxParser::GetSecondPositionValue(
+      LinuxParser::kProcDirectory + std::to_string(pid_) +
+          LinuxParser::kStatusFilename,
+      "VmSize:");
+  // turn kilo to megabytes
+  memory_utilization = memory_utilization / 1000;
+  // round to hundredths
+  memory_utilization = floor(memory_utilization * 100 + 0.5) / 100;
+  // limit string length for proper displaying
+  return ReduceStringLength(std::to_string(memory_utilization), 6);
+  ;
+};
 
-// TODO: Return the user (name) that generated this process
+// Return the user (name) that generated this process
 string Process::User() const { return user_; }
 
-// TODO: Return the age of this process (in seconds)
-long int Process::UpTime() const { return uptime_; }
+// Return the age of this process (in seconds)
+long int Process::UpTime() const {
+  string value = LinuxParser::GetNthValue(LinuxParser::kProcDirectory +
+                                              std::to_string(pid_) +
+                                              LinuxParser::kStatFilename,
+                                          22);
+  // turn clock ticks into seconds
+  long int uptime = ::atof(value.c_str()) / sysconf(_SC_CLK_TCK);
+  return uptime;
+};
 
 // Overload the "less than" comparison operator for Process objects
 bool Process::operator<(Process const& a) const {

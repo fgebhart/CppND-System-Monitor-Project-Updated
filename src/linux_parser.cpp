@@ -8,7 +8,6 @@
 using std::string;
 using std::vector;
 
-
 vector<int> LinuxParser::GetCPUData() {
   vector<int> cpu_data;
   string value, line;
