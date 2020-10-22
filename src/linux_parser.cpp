@@ -8,6 +8,28 @@
 using std::string;
 using std::vector;
 
+
+vector<string> LinuxParser::GetCPUData() {
+  vector<string> cpu_data;
+  string value, line;
+  std::ifstream filestream(LinuxParser::kProcDirectory +
+                           LinuxParser::kStatFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      if (line.find("cpu") != string::npos) {
+        std::istringstream linestream(line);
+        while (linestream >> value) {
+          if (value != "cpu") {
+            cpu_data.push_back(value);
+          }
+        }
+        break;  // ensure to only collect the data of the first hit of "cpu"
+      }
+    }
+  }
+  return cpu_data;
+}
+
 // get the value to a given key in a file
 string LinuxParser::FindValueForKeyInFile(string path_to_file,
                                           string lookup_key) {

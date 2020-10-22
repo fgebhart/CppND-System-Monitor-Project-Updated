@@ -26,6 +26,7 @@ int TotalProcesses();
 int RunningProcesses();
 std::string OperatingSystem();
 std::string Kernel();
+std::vector<std::string> GetCPUData();
 std::string FindValueForKeyInFile(std::string path_to_file,
                                   std::string lookup_key);
 int GetSecondPositionValue(std::string path_to_file, std::string lookup_key);

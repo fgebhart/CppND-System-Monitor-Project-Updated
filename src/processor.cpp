@@ -5,30 +5,10 @@
 
 #include "linux_parser.h"
 
-std::vector<std::string> Processor::GetCPUData() {
-  std::vector<std::string> cpu_data;
-  std::string value, line;
-  std::ifstream filestream(LinuxParser::kProcDirectory +
-                           LinuxParser::kStatFilename);
-  if (filestream.is_open()) {
-    while (std::getline(filestream, line)) {
-      if (line.find("cpu") != std::string::npos) {
-        std::istringstream linestream(line);
-        while (linestream >> value) {
-          if (value != "cpu") {
-            cpu_data.push_back(value);
-          }
-        }
-        break;  // ensure to only collect the data of the first hit of "cpu"
-      }
-    }
-  }
-  return cpu_data;
-}
 
 // Return the aggregate CPU utilization
 float Processor::Utilization() {
-  std::vector<std::string> cpu_agg = GetCPUData();
+  std::vector<std::string> cpu_agg = LinuxParser::GetCPUData();
   user = std::stoi(cpu_agg[0]);
   nice = std::stoi(cpu_agg[1]);
   system = std::stoi(cpu_agg[2]);
