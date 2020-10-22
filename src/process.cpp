@@ -16,14 +16,13 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-string ReduceStringLength(string input_string, int target_length) {
-  int to_be_removed = input_string.size() - target_length;
-  string output_string =
-      input_string.substr(0, input_string.size() - to_be_removed);
-  return output_string;
+string ReduceStringLength(string &text, int target_length) {
+  int to_be_removed = text.size() - target_length;
+  return text.substr(0, text.size() - to_be_removed);
+  ;
 }
 
-void Process::GatherInfo(int pid) {
+void Process::GatherInfo(int &pid) {
   pid_ = pid;
   int uid = LinuxParser::GetSecondPositionValue(
       LinuxParser::kProcDirectory + std::to_string(pid) +
@@ -98,12 +97,20 @@ string Process::Ram() const {
   // round to hundredths
   memory_utilization = floor(memory_utilization * 100 + 0.5) / 100;
   // limit string length for proper displaying
-  return ReduceStringLength(std::to_string(memory_utilization), 6);
+  string mem = std::to_string(memory_utilization);
+  return ReduceStringLength(mem, 6);
   ;
 };
 
 // Return the user (name) that generated this process
 string Process::User() const { return user_; }
+
+// Return the status of the process
+string Process::Status() const {
+  string path_to_cmd_file = LinuxParser::kProcDirectory + std::to_string(pid_) +
+                            LinuxParser::kStatFilename;
+  return LinuxParser::GetNthValue(path_to_cmd_file, 3);
+};
 
 // Return the age of this process (in seconds)
 long int Process::UpTime() const {
@@ -117,6 +124,6 @@ long int Process::UpTime() const {
 };
 
 // Overload the "less than" comparison operator for Process objects
-bool Process::operator<(Process const& a) const {
+bool Process::operator<(Process const &a) const {
   return a.cpu_utilization_ < cpu_utilization_ ? true : false;
 }

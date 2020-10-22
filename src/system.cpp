@@ -44,19 +44,19 @@ Processor& System::Cpu() { return cpu_; }
 vector<Process>& System::Processes() { return processes_; }
 
 // Return the system's kernel identifier (string)
-std::string System::Kernel() { return kernel_; }
+std::string System::Kernel() const { return kernel_; }
 
 // Return the system's memory utilization
-float System::MemoryUtilization() { return mem_; }
+float System::MemoryUtilization() const { return mem_; }
 
 // Return the operating system name
-std::string System::OperatingSystem() { return os_; }
+std::string System::OperatingSystem() const { return os_; }
 
 // Return the number of processes actively running on the system
-int System::RunningProcesses() { return runningprocesses_; }
+int System::RunningProcesses() const { return runningprocesses_; }
 
 // Return the total number of processes on the system
-int System::TotalProcesses() { return totalprocesses_; }
+int System::TotalProcesses() const { return totalprocesses_; }
 
 // Return the number of seconds since the system started running
-long int System::UpTime() { return uptime_; }
+long int System::UpTime() const { return uptime_; }

@@ -14,11 +14,11 @@ class Process {
   std::string Command() const;
   float CpuUtilization() const;
   std::string Ram() const;
+  std::string Status() const;
   long int UpTime() const;
   bool operator<(Process const& a) const;
-  std::string GetMemoryUtilizationOfProcess(int pid) const;
   // setter functions
-  void GatherInfo(int pid);
+  void GatherInfo(int& pid);
 
   // private members
  private:
@@ -27,9 +27,10 @@ class Process {
   std::string command_;
   float cpu_utilization_;
   std::string ram_;
+  std::string status_;
   long int uptime_;
 };
 
-std::string ReduceStringLength(std::string input_string, int target_length);
+std::string ReduceStringLength(std::string& input_string, int target_length);
 
 #endif

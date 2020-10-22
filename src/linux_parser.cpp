@@ -60,7 +60,7 @@ string LinuxParser::GetNthValue(string path_to_file, int nth_value) {
   if (filestream.is_open()) {
     int counter = 1;
     while (std::getline(filestream, item, ' ')) {
-      // get 22nd value of file, which holds the uptime
+      // e.g. get 22nd value of file, which holds the uptime
       if (counter == nth_value) {
         value = item;
       }
